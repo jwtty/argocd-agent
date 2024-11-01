@@ -111,6 +111,20 @@ func NewAppProjectInformer(ctx context.Context, client appclientset.Interface, n
 			return nil, err
 		}
 	}
+
+	if namespace != "" {
+		namespaceIncluded := false
+		for _, ns := range pi.namespaces {
+			if ns == namespace {
+				namespaceIncluded = true
+				break
+			}
+		}
+		if !namespaceIncluded {
+			pi.namespaces = append(pi.namespaces, namespace)
+		}
+	}
+
 	if pi.logger == nil {
 		pi.logger = logrus.WithField("module", "AppProjectInformer")
 	}
